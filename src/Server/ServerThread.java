@@ -32,6 +32,9 @@ public class ServerThread extends Thread{
                 userDao ud=new userDao();
                 DButil dbu=new DButil();
                 User anUser=new User(username, password);
+                if(!ud.isUserExists(dbu, anUser.getUsername())){
+                    ud.addElement(anUser, dbu);
+                }
                 if(ud.logIn(dbu, anUser)&&SocketServer.addUserOnline(anUser.getUsername())){
                     out.println("true");
                     out.flush();

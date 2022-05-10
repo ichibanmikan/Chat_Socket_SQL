@@ -11,15 +11,11 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 
-import Bean.User;
-import Dao.*;
 import java.net.Socket;
-import java.sql.SQLException;
 import java.util.Objects;
 
 import Client.Graphics.*;
 import Server.SocketServer;
-import Util.DButil;
 
 public class SocketClientThread extends Thread{
     static Socket mySocket = null;  // 一定要加上static，否则新建线程时会清空

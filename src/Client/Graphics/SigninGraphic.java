@@ -24,7 +24,9 @@ public class SigninGraphic {
 
         JPanel jp1 = new JPanel();
         JLabel headJLabel = new JLabel("登录界面");
+        JLabel registerJLabel = new JLabel("如果用户不存在将自动注册");
         headJLabel.setFont(new Font(null, 0, 35));  // 设置文本的字体类型、样式 和 大小
+        registerJLabel.setFont(new Font(null, 0, 20));
         jp1.add(headJLabel);
 
         JPanel jp2 = new JPanel();
@@ -33,13 +35,14 @@ public class SigninGraphic {
         JLabel pwdJLabel = new JLabel("密码：    ");
         pwdField = new JPasswordField(20);
         JButton loginButton = new JButton("登录");
-        JButton registerButton = new JButton("注册");  // 没设置功能
+//        JButton registerButton = new JButton("注册");
         jp2.add(nameJLabel);
         jp2.add(textField);
         jp2.add(pwdJLabel);
         jp2.add(pwdField);
+        jp2.add(registerJLabel);
         jp2.add(loginButton);
-        jp2.add(registerButton);
+//        jp2.add(registerButton);
 
         JPanel jp = new JPanel(new BorderLayout());  // BorderLayout布局
         jp.add(jp1, BorderLayout.NORTH);
@@ -52,6 +55,7 @@ public class SigninGraphic {
         listener.setJFrame(jf);
         pwdField.addActionListener(listener);  // 密码框添加监听
         loginButton.addActionListener(listener);  // 按钮添加监听
+//        registerButton.addActionListener(listener);
 
         jf.add(jp);
         jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  // 设置关闭图标作用

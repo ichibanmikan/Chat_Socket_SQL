@@ -42,6 +42,19 @@ public class userDao {
         return false;
     }
 
+    public Boolean isUserExists(DButil dbu, String userName) throws SQLException {
+        String sql="select * from users where username='"+userName+"'";
+        Statement stmt=null;
+        stmt = dbu.getConnection().createStatement();
+        ResultSet rs=null;
+        rs = stmt.executeQuery(sql);
+        if(rs.next()){
+            String uname= rs.getString(1);
+            return uname!=null;
+        }
+        return false;
+    }
+
     public List<User> queAllUser(DButil dbu) throws Exception {
         String sql = "select * from users";
         List<Map<String,Object>> list = dbu.query(sql);
