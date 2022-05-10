@@ -118,24 +118,26 @@ BufferedReader in; //服务器从客户端或者客户端从服务器那里读�
 PrintWriter out; //服务器向客户端或者客户端向服务器那里发送字符串信息
 ```
 
-举个读取的例子
+举个读写的例子
 
 ```java
 读写必须成对出现！！！
     
 举个例子
-服务器：
-BufferedReader loginBuff = new BufferedReader(new InputStreamReader(nowSocket.getInputStream()));
-//像这样 loginBuff创建的方法就是一个公式 就是在nowSocket的基础上创建一个读写桥梁
-String username=loginBuff.readLine(); //readline就类似于C/C++里的 getline
-String password=loginBuff.readLine(); //从下面的out中读出来
-客户端
+客户端发送
 out = new PrintWriter(mySocket.getOutputStream());  // 输出流
 out.println(userName); //类似于标准输出
 out.println(userPwd);// 发送用户名给服务器
 out.flush();  // 清空缓冲区out中的数据 一定要清空一定要清空一定要清空！！！
+服务器读取
+BufferedReader loginBuff = new BufferedReader(new InputStreamReader(nowSocket.getInputStream()));
+//像这样 loginBuff创建的方法就是一个公式 就是在nowSocket的基础上创建一个读写桥梁
+String username=loginBuff.readLine(); //readline就类似于C/C++里的 getline
+String password=loginBuff.readLine(); //从下面的out中读出来
 
 /*
+一定要记得逻辑上先发送再读取！！！！！
+
 为什么用loginBuff和out 不指定用哪个就能完成读写呢
 因为首先 out就是个缓冲区，就像C/C++中的命令行输入/输出
 创建了BufferedReader loginBuff = new BufferedReader(new InputStreamReader(nowSocket.getInputStream()));
