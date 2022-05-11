@@ -35,7 +35,7 @@ public class ConversationGraphic {
         JLabel label = new JLabel("用户：" + userName);
         textArea = new JTextArea("***************登录成功，欢迎来到多人聊天室！****************\n",12, 35);
         textArea.setEditable(false);  // 设置为不可修改
-        onlineArea = new JTextArea("在线用户", 10, 30);
+        onlineArea = new JTextArea("当前用户\n", 10, 30);
         onlineArea.setEditable(false);
         JScrollPane scroll = new JScrollPane(textArea);  // 设置滚动面板（装入textArea）
         JScrollPane onlineScroll = new JScrollPane(onlineArea);
@@ -62,6 +62,7 @@ public class ConversationGraphic {
         listener = new SocketClientThread.ChatViewListen();
         listener.setJTextField(text);  // 调用PoliceListen类的方法
         listener.setJTextArea(textArea);
+        listener.setOnlineJTextArea(onlineArea);
         listener.setChatViewJf(jf);
         text.addActionListener(listener);  // 文本框添加监听
         button.addActionListener(listener);  // 按钮添加监听

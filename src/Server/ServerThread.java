@@ -11,6 +11,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.List;
 
 
 public class ServerThread extends Thread{
@@ -37,6 +38,11 @@ public class ServerThread extends Thread{
                 }
                 if(ud.logIn(dbu, anUser)&&SocketServer.addUserOnline(anUser.getUsername())){
                     out.println("true");
+                    List<User> arrayUser=ud.queAllUser(dbu);
+                    out.println(Integer.toString(arrayUser.size()));
+                    for (User user : arrayUser) {
+                        out.println(user.getUsername());
+                    }
                     out.flush();
                     nowUser=anUser;
                     break;
@@ -44,7 +50,7 @@ public class ServerThread extends Thread{
                     out.println("false");
                 }
                 out.flush();
-            } catch (IOException | SQLException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }

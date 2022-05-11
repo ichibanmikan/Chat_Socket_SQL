@@ -27,15 +27,19 @@ public class SocketClientThread extends Thread{
     static PrintWriter out = null;
     static String userName;
     static String userPwd;
-
+    static String[] allUser;
+    static int numAllUser;
     // 用于接收从服务端发送来的消息
     public void run() {
         try {
             in = new BufferedReader(new InputStreamReader(mySocket.getInputStream()));  // 输入流
-            System.out.println("+++");
-            System.out.println(SocketServer.ListOnlineUser.size());
-            for(int i=0; i<SocketServer.ListOnlineUser.size(); i++){
-                onlineUser.append(SocketServer.ListOnlineUser.get(i)+'\n');
+//            System.out.println("+++");
+//            System.out.println(SocketServer.ListOnlineUser.size());
+            onlineUser.append(userName+'\n');
+            for(int i=0; i<numAllUser; i++){
+                if(!allUser[i].equals(userName)){
+                    onlineUser.append(allUser[i]+'\n');
+                }
             }
             while (true) {
                 String str = in.readLine();  // 获取服务端发送的信息
@@ -82,6 +86,12 @@ public class SocketClientThread extends Thread{
                         JOptionPane.showMessageDialog(loginJFrame, "账号或密码错误，请重新输入！", "提示", JOptionPane.WARNING_MESSAGE);
                     } else {
                         // 新建普通读写线程并启动
+                        String lengthStr=loginBuff.readLine();
+                        numAllUser=Integer.parseInt(lengthStr);
+                        allUser=new String[1005];
+                        for(int i=0; i<numAllUser; i++){
+                            allUser[i]=loginBuff.readLine();
+                        }
                         loginJFrame.setVisible(false);
                         chatView = new ConversationGraphic(userName);  // 新建聊天窗口,设置聊天窗口的用户名（静态）
                         SocketClientThread readAndPrint = new SocketClientThread();
