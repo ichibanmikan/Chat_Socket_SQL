@@ -61,7 +61,6 @@ public class ServerThread extends Thread{
             in = new BufferedReader(new InputStreamReader(nowSocket.getInputStream()));
             while (true) {
                 String headInfo = in.readLine();
-                System.out.println("*****"+headInfo);
                 if(headInfo.equals("sendMessage")){
                     String str = in.readLine();
                     for(Socket socket: SocketServer.list) {
@@ -97,7 +96,6 @@ public class ServerThread extends Thread{
                         }
                     }
                 } else if (headInfo.equals("singleChatStart")){
-
                     String destinyName = in.readLine();
                     System.out.println("   "+destinyName);
                     if(ud.isUserExists(dbu, destinyName)){

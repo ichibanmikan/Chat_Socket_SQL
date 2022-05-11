@@ -75,6 +75,7 @@ public class ConversationGraphic {
         chooseSingleChatListener = new SingleChatThread.chooseSingleChat();
         chooseSingleChatListener.setJFrame(jf);
         chooseSingleChatListener.setJTextField(textSingleChat);
+        chooseSingleChatListener.setUserName(this.userName);
         textSingleChat.addActionListener(chooseSingleChatListener);
         buttonSingleChat.addActionListener(chooseSingleChatListener);
 

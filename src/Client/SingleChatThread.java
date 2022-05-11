@@ -52,7 +52,9 @@ public class SingleChatThread extends Thread{
         public void setJFrame(JFrame jFrame) {
             this.SingleChatJFrame = jFrame;
         }
-
+        public void setUserName(String UserName){
+            userName=UserName;
+        }
         public void actionPerformed(ActionEvent event) {
             try {
                 InetAddress addr = InetAddress.getByName(null);  // 获取主机地址
@@ -62,7 +64,6 @@ public class SingleChatThread extends Thread{
                 e.printStackTrace();
             }
             nowHisName = textField.getText();
-            System.out.println("+++ "+nowHisName);
             try {
                 out.println("singleChatStart");
                 out.println(nowHisName);
@@ -73,14 +74,12 @@ public class SingleChatThread extends Thread{
                     JOptionPane.showMessageDialog(SingleChatJFrame, "查无此人！", "ん？", JOptionPane.WARNING_MESSAGE);
                 } else {
                     // 新建普通读写线程并启动
-                    System.out.println(111);
                     String lengthStr = SingleChatBuff.readLine();
                     numAllUser = Integer.parseInt(lengthStr);
                     allUser = new String[1005];
                     for (int i = 0; i < numAllUser; i++) {
                         allUser[i] = SingleChatBuff.readLine();
                     }
-                    SingleChatJFrame.setVisible(false);
                     singleChatView = new SingleChatView(userName, nowHisName);  // 新建聊天窗口,设置聊天窗口的用户名（静态）
                     SingleChatThread readAndPrint = new SingleChatThread();
                     readAndPrint.start();

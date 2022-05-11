@@ -40,13 +40,13 @@ public class SingleChatView {
         jp.add(text);
         jp.add(button);
 
-
         // 设置“发送”监听
         listenerSingleChat = new SingleChatThread.SingleChatViewListen();
         listenerSingleChat.setJTextField(text);  // 调用PoliceListen类的方法
         listenerSingleChat.setJTextArea(textArea);
         listenerSingleChat.setChatViewJf(jf);
         listenerSingleChat.setNowHisName(hisName);
+
         text.addActionListener(listenerSingleChat);  // 文本框添加监听
         button.addActionListener(listenerSingleChat);  // 按钮添加监听
 
