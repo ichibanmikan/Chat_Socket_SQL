@@ -1,6 +1,7 @@
 package Server;
 
 import Bean.User;
+import Bean.UserSocket;
 import Dao.userDao;
 import Util.DButil;
 
@@ -9,7 +10,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -19,6 +20,8 @@ public class ServerThread extends Thread{
     BufferedReader in =null;
     PrintWriter out = null;
     User nowUser;
+    DButil dbu=new DButil();
+    userDao ud=new userDao();
     public ServerThread(Socket s) {
         this.nowSocket = s;
     }
@@ -30,8 +33,6 @@ public class ServerThread extends Thread{
                 BufferedReader loginBuff = new BufferedReader(new InputStreamReader(nowSocket.getInputStream()));
                 String username=loginBuff.readLine();
                 String password=loginBuff.readLine();
-                userDao ud=new userDao();
-                DButil dbu=new DButil();
                 User anUser=new User(username, password);
                 if(!ud.isUserExists(dbu, anUser.getUsername())){
                     ud.addElement(anUser, dbu);
@@ -43,6 +44,8 @@ public class ServerThread extends Thread{
                     for (User user : arrayUser) {
                         out.println(user.getUsername());
                     }
+                    UserSocket us=new UserSocket(anUser, nowSocket);
+                    SocketServer.allUserSocket.add(us);
                     out.flush();
                     nowUser=anUser;
                     break;
@@ -57,20 +60,53 @@ public class ServerThread extends Thread{
         try {
             in = new BufferedReader(new InputStreamReader(nowSocket.getInputStream()));
             while (true) {
-                String str = in.readLine();
-                for(Socket socket: SocketServer.list) {
-                    out = new PrintWriter(socket.getOutputStream());
-                    Date nowDate=new Date();
-                    if(socket == nowSocket) {
-                        String spaces="          ";
-                        out.println(spaces+spaces+spaces+spaces+spaces+nowDate);
-                        out.println(spaces+spaces+spaces+spaces+spaces+str);
-                    } else {
-                        out.println(nowDate);
-                        out.println(str);
+                String headInfo = in.readLine();
+                System.out.println("*****"+headInfo);
+                if(headInfo.equals("sendMessage")){
+                    String str = in.readLine();
+                    for(Socket socket: SocketServer.list) {
+                        out = new PrintWriter(socket.getOutputStream());
+                        Date nowDate=new Date();
+                        if(socket == nowSocket) {
+                            String spaces="          ";
+                            out.println(spaces+spaces+spaces+spaces+spaces+nowDate);
+                            out.println(spaces+spaces+spaces+spaces+spaces+str);
+                        } else {
+                            out.println(nowDate);
+                            out.println(str);
+                        }
+                        out.println();
+                        out.flush();
                     }
-                    out.println();
-                    out.flush();
+                } else if(headInfo.equals("singleChat")){
+                    String str = in.readLine();
+                    String destinyName = in.readLine();
+                    Date nowDate=new Date();
+                    for(int i=0; i<SocketServer.allUserSocket.size(); i++) {
+                        if(SocketServer.allUserSocket.get(i).getThisSocket() == nowSocket) {
+                            String spaces="          ";
+                            out.println(spaces+spaces+spaces+spaces+spaces+nowDate);
+                            out.println(spaces+spaces+spaces+spaces+spaces+str);
+                            out.println();
+                            out.flush();
+                        } else if(SocketServer.allUserSocket.get(i).getThisUser().getUsername().equals(destinyName)) {
+                            out.println(nowDate);
+                            out.println(str);
+                            out.println();
+                            out.flush();
+                        }
+                    }
+                } else if (headInfo.equals("singleChatStart")){
+
+                    String destinyName = in.readLine();
+                    System.out.println("   "+destinyName);
+                    if(ud.isUserExists(dbu, destinyName)){
+                        out.println("true");
+                        out.flush();
+                    } else {
+                        out.println("false");
+                        out.flush();
+                    }
                 }
             }
         } catch (Exception e) {

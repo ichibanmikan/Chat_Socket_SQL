@@ -1,7 +1,7 @@
 // ChatView.java
 package Client.Graphics;
 
-import Client.SocketClient;
+import Client.SingleChatThread;
 import Client.SocketClientThread;
 import Client.ClientFileThread;
 import java.awt.event.ActionEvent;
@@ -18,6 +18,8 @@ public class ConversationGraphic {
     JTextArea textArea;
     JTextArea onlineArea;
     SocketClientThread.ChatViewListen listener;
+    SingleChatThread.chooseSingleChat chooseSingleChatListener;
+    JTextField textSingleChat;
 
     // 构造函数
     public ConversationGraphic(String userName) {
@@ -50,7 +52,10 @@ public class ConversationGraphic {
         jp.add(text);
         jp.add(button);
         jp.add(openFileBtn);
-
+        textSingleChat = new JTextField(20);
+        JButton buttonSingleChat = new JButton("私聊");
+        jp.add(textSingleChat);
+        jp.add(buttonSingleChat);
         // 设置“打开文件”监听
         openFileBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -67,6 +72,12 @@ public class ConversationGraphic {
         text.addActionListener(listener);  // 文本框添加监听
         button.addActionListener(listener);  // 按钮添加监听
 
+        chooseSingleChatListener = new SingleChatThread.chooseSingleChat();
+        chooseSingleChatListener.setJFrame(jf);
+        chooseSingleChatListener.setJTextField(textSingleChat);
+        textSingleChat.addActionListener(chooseSingleChatListener);
+        buttonSingleChat.addActionListener(chooseSingleChatListener);
+
         jf.add(jp);
         jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  // 设置右上角关闭图标的作用
         jf.setVisible(true);  // 设置可见
@@ -76,7 +87,7 @@ public class ConversationGraphic {
         // 创建一个默认的文件选择器
         JFileChooser fileChooser = new JFileChooser();
         // 设置默认显示的文件夹
-        fileChooser.setCurrentDirectory(new File("D:/OneDrive - hnu.edu.cn/mylearn/vscode/Chat_Socket/UserFiles"));
+        fileChooser.setCurrentDirectory(new File("D:/OneDrive - hnu.edu.cn/mylearn/vscode/Chat_Socket_SQL/UserFiles"));
         // 添加可用的文件过滤器（FileNameExtensionFilter 的第一个参数是描述, 后面是需要过滤的文件扩展名）
         // 设置默认使用的文件过滤器（FileNameExtensionFilter 的第一个参数是描述, 后面是需要过滤的文件扩展名 可变参数）
         fileChooser.setFileFilter(new FileNameExtensionFilter("(txt)", "txt"));

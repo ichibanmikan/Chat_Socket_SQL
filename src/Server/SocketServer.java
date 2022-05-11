@@ -1,7 +1,7 @@
 // Server.java
 package Server;
 
-import Bean.User;
+import Bean.UserSocket;
 
 import java.io.*;
 import java.net.*;
@@ -12,14 +12,13 @@ public class SocketServer{
     static ServerSocket server = null; //表示本机的服务器
     static Socket socket = null; //线程
     static List<Socket> list = new ArrayList<Socket>();  // 存储客户端
+    static List<UserSocket> allUserSocket=new ArrayList<UserSocket>();
 
     public static Boolean addUserOnline(String userName){
         if(isTheUserOnline(userName)){
             return false;
         }
-        System.out.println(ListOnlineUser.size());
         ListOnlineUser.add(userName);
-        System.out.println(ListOnlineUser.size());
         return true;
     } //如果已经在线就不能登录 不在线就可以登录
 
