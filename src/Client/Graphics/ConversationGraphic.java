@@ -6,6 +6,7 @@ import Client.SocketClientThread;
 import Client.ClientFileThread;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.*;
 import java.io.File;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -21,6 +22,9 @@ public class ConversationGraphic {
     SingleChatThread.chooseSingleChat chooseSingleChatListener;
     JTextField textSingleChat;
 
+    private Color color = Color.BLACK;
+    private JFrame frame = new JFrame("文字展示器");
+
     // 构造函数
     public ConversationGraphic(String userName) {
         this.userName = userName;
@@ -30,8 +34,10 @@ public class ConversationGraphic {
     // 初始化函数
     void init() {
         JFrame jf = new JFrame("客户端");
-        jf.setBounds(500,200,800,330);  //设置坐标和大小
-        jf.setResizable(false);  // 缩放为不能缩放
+        jf.setBounds(500,200,800,600);  //设置坐标和大小
+        jf.setResizable(true);  // 缩放为可缩放 （我mac上面打开大小比较怪）
+
+
 
         JPanel jp = new JPanel();
         JLabel label = new JLabel("用户：" + userName);
@@ -47,6 +53,15 @@ public class ConversationGraphic {
         jp.add(scroll);
         jp.add(onlineScroll);
         text = new JTextField(20);
+
+        // 更改颜色的相关定义
+        JButton colorbutton = new JButton("选择颜色");
+        JButton apply = new JButton("应用颜色");
+        jp.add(colorbutton);
+        jp.add(apply);
+        apply.setEnabled(false);
+
+
         JButton button = new JButton("发送");
         JButton openFileBtn = new JButton("发送文件");
         jp.add(text);
@@ -56,6 +71,25 @@ public class ConversationGraphic {
         JButton buttonSingleChat = new JButton("私聊");
         jp.add(textSingleChat);
         jp.add(buttonSingleChat);
+
+        // 更改颜色按钮的响应结果 -- gxx 5/12
+        colorbutton.addActionListener(e -> {
+            try {
+                color = JColorChooser.showDialog(frame, "选择字体颜色", color);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+            // 应用按钮可用
+            apply.setEnabled(true);
+        });
+        apply.addActionListener(e -> {
+            textArea.setForeground(color);
+            text.setForeground(color);
+            textSingleChat.setForeground(color);
+        });
+
+
+
         // 设置“打开文件”监听
         openFileBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
