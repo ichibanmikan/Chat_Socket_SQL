@@ -96,6 +96,14 @@ public class ServerThread extends Thread{
                         } else if(SocketServer.allUserSocket.get(i).getThisUser().getUsername().equals(destinyName)) {
                             PrintWriter newOut = new PrintWriter(SocketServer.allUserSocket.get(i).getThisSocket().getOutputStream());
                             newOut.println("this is a Single Chat message");
+                            String sourceName = new String();
+                            for(int j=0; j<str.length(); j++){
+                                if(str.charAt(j)==':'&&str.charAt(j+1)==' '){
+                                    break;
+                                }
+                                sourceName+=str.charAt(j);
+                            }
+                            newOut.println(sourceName);
                             newOut.println(nowDate);
                             newOut.println(str);
                             newOut.println();

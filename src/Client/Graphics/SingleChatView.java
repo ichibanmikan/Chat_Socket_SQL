@@ -9,8 +9,8 @@ import javax.swing.*;
 public class SingleChatView {
     private final String myName;
     private final String hisName;
-    JTextField text;
-    JTextArea textArea;
+    public JTextField text;
+    public JTextArea textArea;
     SingleChatThread.SingleChatViewListen listenerSingleChat;
 
     // 构造函数
@@ -18,6 +18,14 @@ public class SingleChatView {
         this.myName = userName;
         this.hisName = hisName;
         init();
+    }
+
+    public String getHisName() {
+        return hisName;
+    }
+
+    public String getMyName() {
+        return myName;
     }
 
     // 初始化函数
