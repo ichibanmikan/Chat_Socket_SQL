@@ -33,7 +33,6 @@ public class SingleChatThread extends Thread{
             in = new BufferedReader(new InputStreamReader(mySocket.getInputStream()));  // 输入流
             while (true) {
                 String str = in.readLine();  // 获取服务端发送的信息
-                System.out.println(str);
                 textShowSingleChat.append(str + '\n');  // 添加进聊天客户端的文本区域
                 textShowSingleChat.setCaretPosition(textShowSingleChat.getDocument().getLength());  // 设置滚动条在最下面
             }
@@ -75,11 +74,6 @@ public class SingleChatThread extends Thread{
                 } else {
                     // 新建普通读写线程并启动
                     String lengthStr = SingleChatBuff.readLine();
-                    numAllUser = Integer.parseInt(lengthStr);
-                    allUser = new String[1005];
-                    for (int i = 0; i < numAllUser; i++) {
-                        allUser[i] = SingleChatBuff.readLine();
-                    }
                     singleChatView = new SingleChatView(userName, nowHisName);  // 新建聊天窗口,设置聊天窗口的用户名（静态）
                     SingleChatThread readAndPrint = new SingleChatThread();
                     readAndPrint.start();

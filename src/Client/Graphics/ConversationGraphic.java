@@ -34,7 +34,7 @@ public class ConversationGraphic {
     // 初始化函数
     void init() {
         JFrame jf = new JFrame("客户端");
-        jf.setBounds(500,200,800,600);  //设置坐标和大小
+        jf.setBounds(500,200,850,350);  //设置坐标和大小
         jf.setResizable(true);  // 缩放为可缩放 （我mac上面打开大小比较怪）
 
 

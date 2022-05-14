@@ -40,7 +40,6 @@ public class SocketClientThread extends Thread{
                     onlineUser.append(allUser[i]+'\n');
                 }
             }
-
             while (true) {
                 String str = in.readLine();  // 获取服务端发送的信息
                 System.out.println(str);

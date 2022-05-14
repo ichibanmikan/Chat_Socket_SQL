@@ -61,7 +61,9 @@ public class ServerThread extends Thread{
             in = new BufferedReader(new InputStreamReader(nowSocket.getInputStream()));
             while (true) {
                 String headInfo = in.readLine();
+                System.out.println(headInfo);
                 if(headInfo.equals("sendMessage")){
+                    System.out.println(333);
                     String str = in.readLine();
                     for(Socket socket: SocketServer.list) {
                         out = new PrintWriter(socket.getOutputStream());
@@ -78,8 +80,11 @@ public class ServerThread extends Thread{
                         out.flush();
                     }
                 } else if(headInfo.equals("singleChat")){
-                    String str = in.readLine();
+                    System.out.println(222);
                     String destinyName = in.readLine();
+                    String str = in.readLine();
+                    System.out.println(str);
+                    System.out.println(destinyName);
                     Date nowDate=new Date();
                     for(int i=0; i<SocketServer.allUserSocket.size(); i++) {
                         if(SocketServer.allUserSocket.get(i).getThisSocket() == nowSocket) {
@@ -89,13 +94,16 @@ public class ServerThread extends Thread{
                             out.println();
                             out.flush();
                         } else if(SocketServer.allUserSocket.get(i).getThisUser().getUsername().equals(destinyName)) {
-                            out.println(nowDate);
-                            out.println(str);
-                            out.println();
-                            out.flush();
+                            PrintWriter newOut = new PrintWriter(SocketServer.allUserSocket.get(i).getThisSocket().getOutputStream());
+                            newOut.println("this is a Single Chat message");
+                            newOut.println(nowDate);
+                            newOut.println(str);
+                            newOut.println();
+                            newOut.flush();
                         }
                     }
                 } else if (headInfo.equals("singleChatStart")){
+                    System.out.println(111);
                     String destinyName = in.readLine();
                     System.out.println("   "+destinyName);
                     if(ud.isUserExists(dbu, destinyName)){
