@@ -45,50 +45,15 @@ public class SocketClientThread extends Thread{
             }
             while (true) {
                 String str = in.readLine();  // 获取服务端发送的信息
-                System.out.println(str);
-                if(str.equals("this is a Single Chat message")){
-                    String sourceName=in.readLine();
-                    System.out.println(sourceName);
-                    System.out.println(123456);
-                    if(scwList==null){
-                        scwList=new ArrayList<SingleChatView>();
-                        SingleChatView anScw = new SingleChatView(userName, sourceName);
-                        scwList.add(anScw);
-                        String contents=in.readLine();
-                        contents+='\n';
-                        contents+=in.readLine();
-                        anScw.textArea.append(contents + '\n');  // 添加进聊天客户端的文本区域
-                        anScw.textArea.setCaretPosition(textShow.getDocument().getLength());  // 设置滚动条在最下面
-                    } else {
-                        int pos=-1;
-                        System.out.println("----");
-                        System.out.println(pos);
-                        for(int i=0; i<scwList.size(); i++){
-                            if(scwList.get(i).getHisName()==sourceName&&scwList.get(i).getMyName()==userName){
-                                pos=i;
-                                break;
-                            }
-                        }
-                        if(pos==-1){
-                            SingleChatView newScw = new SingleChatView(userName, sourceName);
-                            scwList.add(newScw);
-                            String contents=in.readLine();
-                            contents+='\n';
-                            contents+=in.readLine();
-                            newScw.textArea.append(contents + '\n');  // 添加进聊天客户端的文本区域
-                            newScw.textArea.setCaretPosition(textShow.getDocument().getLength());  // 设置滚动条在最下面
-                        } else {
-                            String contents=in.readLine();
-                            contents+='\n';
-                            contents+=in.readLine();
-                            scwList.get(pos).textArea.append(contents + '\n');  // 添加进聊天客户端的文本区域
-                            scwList.get(pos).textArea.setCaretPosition(textShow.getDocument().getLength());  // 设置滚动条在最下面
-                        }
-                    }
-                } else {
-                    textShow.append(str + '\n');  // 添加进聊天客户端的文本区域
-                    textShow.setCaretPosition(textShow.getDocument().getLength());  // 设置滚动条在最下面
+                if(str.equals("Open the door!!!")){
+                    String souName=in.readLine();
+                    SingleChatView singleChatView = new SingleChatView(userName, souName);  // 新建聊天窗口,设置聊天窗口的用户名（静态）
+                    SingleChatThread readAndPrint = new SingleChatThread();
+                    readAndPrint.start();
+                    continue;
                 }
+                textShow.append(str + '\n');  // 添加进聊天客户端的文本区域
+                textShow.setCaretPosition(textShow.getDocument().getLength());  // 设置滚动条在最下面
             }
         } catch (Exception ignored) {}
     }
@@ -185,7 +150,6 @@ public class SocketClientThread extends Thread{
                     JOptionPane.showMessageDialog(chatViewJFrame, "输入为空，请重新输入！", "提示", JOptionPane.WARNING_MESSAGE);
                     return;
                 }
-                out.println("sendMessage");
                 out.println(userName + ": " + str);  // 输出给服务端
                 out.flush();  // 清空缓冲区out中的数据
 

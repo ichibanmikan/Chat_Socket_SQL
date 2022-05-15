@@ -35,13 +35,14 @@ public class SocketServer{
             // 在服务器端对客户端开启文件传输的线程
             ServerFile serverFileThread = new ServerFile();
             serverFileThread.start();
+            ServerSingleChat ssc = new ServerSingleChat();
+            ssc.start();
             server = new ServerSocket(8081);  // 服务器端套接字（只能建立一次）
             // 等待连接并开启相应线程
             while (true) {
                 socket = server.accept();  // 等待连接
                 list.add(socket);  // 添加当前客户端到列表
-                // 在服务器端对客户端开启相应的线程
-                System.out.println(socket.toString());
+//                System.out.println(socket.toString());
                 ServerThread readAndPrint = new ServerThread(socket); //循环等待客户端，给每一个客户端分配一个线程
                 readAndPrint.start(); //Thread类的特点 start就是表示线程开始，调用run()函数
             }

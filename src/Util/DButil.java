@@ -15,10 +15,10 @@ public class DButil {
     public Connection getConnection() {
         Connection conn = null;
         try{
-            System.out.println("正在连接数据库...");
+//            System.out.println("正在连接数据库...");
             Class.forName(driverClass);
             conn = DriverManager.getConnection(url,user,password);
-            System.out.println("数据库连接成功！");
+//            System.out.println("数据库连接成功！");
         }catch (Exception e){
             e.printStackTrace();
         }

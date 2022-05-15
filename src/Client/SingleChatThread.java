@@ -11,6 +11,8 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class SingleChatThread extends Thread{
@@ -23,20 +25,62 @@ public class SingleChatThread extends Thread{
     static String[] allUser;
     static int numAllUser;
     static String nowHisName;
-
+    static List<SingleChatView> scwList;
     static JTextField textInputSingleChat;
     static JTextArea textShowSingleChat;
     static JFrame chatViewJFrameSingleChat;
 
     public void run() {
         try {
+            if(mySocket==null){
+                InetAddress addr = InetAddress.getByName(null);  // 获取主机地址
+                mySocket = new Socket(addr,8095);  // 客户端套接字
+                out = new PrintWriter(mySocket.getOutputStream());
+            }
             in = new BufferedReader(new InputStreamReader(mySocket.getInputStream()));  // 输入流
             while (true) {
-                String str = in.readLine();  // 获取服务端发送的信息
-                textShowSingleChat.append(str + '\n');  // 添加进聊天客户端的文本区域
-                textShowSingleChat.setCaretPosition(textShowSingleChat.getDocument().getLength());  // 设置滚动条在最下面
+                String sourceName=in.readLine();
+//                System.out.println(654321);
+//                System.out.println(sourceName);
+//                System.out.println(123456);
+                if(scwList==null){
+                    scwList=new ArrayList<SingleChatView>();
+                    addNewSingleChat(nowHisName);
+                } else {
+                    int pos=-1;
+                    System.out.println("----");
+                    System.out.println(pos);
+                    for(int i=0; i<scwList.size(); i++){
+                        if(scwList.get(i).getHisName()==nowHisName&&scwList.get(i).getMyName()==userName){
+                            pos=i;
+                            break;
+                        }
+                    }
+                    if(pos==-1){
+                        addNewSingleChat(sourceName);
+                    } else {
+                        String contents=in.readLine();
+                        contents+='\n';
+                        contents+=in.readLine();
+                        scwList.get(pos).textArea.append(contents + '\n');  // 添加进聊天客户端的文本区域
+                        scwList.get(pos).textArea.setCaretPosition(scwList.get(pos).textArea.getDocument().getLength());  // 设置滚动条在最下面
+                    }
+                }
+//                String str = in.readLine();  // 获取服务端发送的信息
+//                textShowSingleChat.append(str + '\n');  // 添加进聊天客户端的文本区域
+//                textShowSingleChat.setCaretPosition(textShowSingleChat.getDocument().getLength());  // 设置滚动条在最下面
             }
         } catch (Exception ignored) {}
+    }
+
+    private void addNewSingleChat(String sourceName) throws IOException {
+        SingleChatView anScw = new SingleChatView(userName, sourceName);
+        scwList.add(anScw);
+        String contents=in.readLine();
+        contents+='\n';
+        contents+=in.readLine();
+        anScw.textArea.append(contents + '\n');  // 添加进聊天客户端的文本区域
+        anScw.textArea.setCaretPosition(anScw.textArea.getDocument().getLength());  // 设置滚动条在最下面
     }
 
     /***********************私聊选项监听***********************/
@@ -57,14 +101,14 @@ public class SingleChatThread extends Thread{
         public void actionPerformed(ActionEvent event) {
             try {
                 InetAddress addr = InetAddress.getByName(null);  // 获取主机地址
-                mySocket = new Socket(addr,8081);  // 客户端套接字
+                mySocket = new Socket(addr,8095);  // 客户端套接字
                 out = new PrintWriter(mySocket.getOutputStream());
             } catch (IOException e) {
                 e.printStackTrace();
             }
             nowHisName = textField.getText();
             try {
-                out.println("singleChatStart");
+                out.println(userName);
                 out.println(nowHisName);
                 out.flush();
                 BufferedReader SingleChatBuff = new BufferedReader(new InputStreamReader(mySocket.getInputStream()));
@@ -72,9 +116,9 @@ public class SingleChatThread extends Thread{
                 if(Objects.equals(isTrue, "false")){
                     JOptionPane.showMessageDialog(SingleChatJFrame, "查无此人！", "ん？", JOptionPane.WARNING_MESSAGE);
                 } else {
-                    // 新建普通读写线程并启动
-                    String lengthStr = SingleChatBuff.readLine();
                     singleChatView = new SingleChatView(userName, nowHisName);  // 新建聊天窗口,设置聊天窗口的用户名（静态）
+                    scwList=new ArrayList<SingleChatView>();
+                    SingleChatThread.scwList.add(singleChatView);
                     SingleChatThread readAndPrint = new SingleChatThread();
                     readAndPrint.start();
                 }
@@ -109,8 +153,6 @@ public class SingleChatThread extends Thread{
                     JOptionPane.showMessageDialog(chatViewJFrame, "输入为空，请重新输入！", "提示", JOptionPane.WARNING_MESSAGE);
                     return;
                 }
-                out.println("singleChat");
-                out.println(nowHisName);
                 out.println(userName + ": " + str);  // 输出给服务端
                 out.flush();  // 清空缓冲区out中的数据
 
