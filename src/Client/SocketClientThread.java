@@ -13,6 +13,7 @@ import java.net.InetAddress;
 
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -47,7 +48,12 @@ public class SocketClientThread extends Thread{
                 String str = in.readLine();  // 获取服务端发送的信息
                 if(str.equals("Open the door!!!")){
                     String souName=in.readLine();
+                    String contextStr=in.readLine();
                     SingleChatView singleChatView = new SingleChatView(userName, souName);  // 新建聊天窗口,设置聊天窗口的用户名（静态）
+                    Date nowDate=new Date();
+                    singleChatView.textArea.append(nowDate.toString());
+                    singleChatView.textArea.append("\n");
+                    singleChatView.textArea.append(contextStr);
                     SingleChatThread readAndPrint = new SingleChatThread();
                     readAndPrint.start();
                     continue;

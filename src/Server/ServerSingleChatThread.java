@@ -49,8 +49,10 @@ public class ServerSingleChatThread extends Thread {
                     Date nowDate = new Date();
                     Boolean isSend=false;
                     String sourceName = "";
+                    int posI;
                     for (int j = 0; j < str.length(); j++) {
                         if (str.charAt(j) == ':' && str.charAt(j + 1) == ' ') {
+                            posI=j;
                             break;
                         }
                         sourceName += str.charAt(j);
@@ -74,14 +76,16 @@ public class ServerSingleChatThread extends Thread {
                             isSend=true;
                         }
                     }
+                    System.out.println("++++ "+isSend);
                     if(!isSend){
                         for(int i=0; i<SocketServer.allUserSocket.size(); i++){
                             if(hisName.equals(SocketServer.allUserSocket.get(i).getThisUser())){
                                 PrintWriter newOut = new PrintWriter(SocketServer.allUserSocket.get(i).getThisSocket().getOutputStream());
                                 newOut.println("Open the door!!!");
                                 newOut.println(username);
+                                newOut.println(str);
                                 newOut.flush();
-                                in.readLine();
+//                                in.readLine();
                                 break;
                             }
                         }
