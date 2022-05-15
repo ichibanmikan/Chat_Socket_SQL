@@ -40,14 +40,12 @@ public class SingleChatThread extends Thread{
             in = new BufferedReader(new InputStreamReader(mySocket.getInputStream()));  // 输入流
             while (true) {
                 String sourceName=in.readLine();
-//                System.out.println(654321);
-//                System.out.println(sourceName);
-//                System.out.println(123456);
+                int pos=-1;
                 if(scwList==null){
                     scwList=new ArrayList<SingleChatView>();
                     addNewSingleChat(nowHisName);
+                    pos=0;
                 } else {
-                    int pos=-1;
                     System.out.println("----");
                     System.out.println(pos);
                     for(int i=0; i<scwList.size(); i++){
@@ -57,15 +55,17 @@ public class SingleChatThread extends Thread{
                         }
                     }
                     if(pos==-1){
+                        pos=scwList.size();
                         addNewSingleChat(sourceName);
-                    } else {
-                        String contents=in.readLine();
-                        contents+='\n';
-                        contents+=in.readLine();
-                        scwList.get(pos).textArea.append(contents + '\n');  // 添加进聊天客户端的文本区域
-                        scwList.get(pos).textArea.setCaretPosition(scwList.get(pos).textArea.getDocument().getLength());  // 设置滚动条在最下面
                     }
                 }
+                String contents=in.readLine();
+                contents+='\n';
+                contents+=in.readLine();
+                contents+=in.readLine();
+                contents+='\n';
+                scwList.get(pos).textArea.append(contents + '\n');  // 添加进聊天客户端的文本区域
+                scwList.get(pos).textArea.setCaretPosition(scwList.get(pos).textArea.getDocument().getLength());  // 设置滚动条在最下面
 //                String str = in.readLine();  // 获取服务端发送的信息
 //                textShowSingleChat.append(str + '\n');  // 添加进聊天客户端的文本区域
 //                textShowSingleChat.setCaretPosition(textShowSingleChat.getDocument().getLength());  // 设置滚动条在最下面
@@ -76,11 +76,6 @@ public class SingleChatThread extends Thread{
     private void addNewSingleChat(String sourceName) throws IOException {
         SingleChatView anScw = new SingleChatView(userName, sourceName);
         scwList.add(anScw);
-        String contents=in.readLine();
-        contents+='\n';
-        contents+=in.readLine();
-        anScw.textArea.append(contents + '\n');  // 添加进聊天客户端的文本区域
-        anScw.textArea.setCaretPosition(anScw.textArea.getDocument().getLength());  // 设置滚动条在最下面
     }
 
     /***********************私聊选项监听***********************/
