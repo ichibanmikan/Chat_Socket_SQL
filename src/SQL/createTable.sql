@@ -15,8 +15,8 @@ insert into Users values
 drop table if exists Messages;
 create table Messages(
     username varchar(20),
-    sendDate date,
+    messageNo int,
     contexts varchar(1023),
-    primary key (username, sendDate)
+    primary key (username, messageNo)
 );
 
