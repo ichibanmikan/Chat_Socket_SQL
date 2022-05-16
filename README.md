@@ -29,13 +29,18 @@
 │   └── production
 │       └── Chat_Socket
 │           ├── Bean
-│           │   └── User.class
+│           │   ├── User.class
+│           │   └── UserSocket.class
 │           ├── Client
 │           │   ├── ClientFileThread.class
 │           │   ├── Graphics
 │           │   │   ├── ConversationGraphic$1.class
 │           │   │   ├── ConversationGraphic.class
-│           │   │   └── SigninGraphic.class
+│           │   │   ├── SigninGraphic.class
+│           │   │   └── SingleChatView.class
+│           │   ├── SingleChatThread$SingleChatViewListen.class
+│           │   ├── SingleChatThread$chooseSingleChat.class
+│           │   ├── SingleChatThread.class
 │           │   ├── SocketClient.class
 │           │   ├── SocketClientThread$ChatViewListen$1.class
 │           │   ├── SocketClientThread$ChatViewListen.class
@@ -48,6 +53,8 @@
 │           ├── Server
 │           │   ├── ServerFile.class
 │           │   ├── ServerFileThread.class
+│           │   ├── ServerSingleChat.class
+│           │   ├── ServerSingleChatThread.class
 │           │   ├── ServerThread.class
 │           │   └── SocketServer.class
 │           ├── Util
@@ -57,12 +64,15 @@
 │           └── config.properties
 └── src //源代码
     ├── Bean //实体层
-    │   └── User.java //用户类 代表数据库中的用户
+    │   |── User.java //用户类 代表数据库中的用户
+    │   └── UserSocket.java //用户和它的socket 主要是用于管理私聊部分
     ├── Client //服务器
     │   ├── ClientFileThread.java //文件线程
     │   ├── Graphics //图形界面 里面还有一些内部类是监听函数之类的
     │   │   ├── ConversationGraphic.java //登陆的图形界面
-    │   │   └── SigninGraphic.java //登陆的图形界面
+    │   │   |── SigninGraphic.java //登陆的图形界面
+    │   │   └── SingleChatView.java //私聊界面
+    │   ├── SingleChatThread.java //私聊客户端线程
     │   ├── SocketClient.java //客户端主类
     │   └── SocketClientThread.java //客户端线程，就代表一个客户端
     ├── Dao //是一些跟数据库有关的实际的操作，比如增删改查之类的，这一层把SQL语句写好交给Util
@@ -73,7 +83,9 @@
     │   ├── ServerFile.java //服务器发文件的
     │   ├── ServerFileThread.java //服务器文件线程
     │   ├── ServerThread.java //服务器线程 是一种抽象的方法 好像每个客户端都有一个独立的服务器为他服务(实际上只是一个服务器								    线程为他服务)
-    │   └── SocketServer.java //循环等待客户端，给每一个客户端分配一个线程
+    │   |── SocketServer.java //循环等待客户端，给每一个客户端分配一个线程
+    │   ├── ServerSingleChat.java //服务器管理私聊的
+    │   ├── ServerSingleChatThread.java //私聊管理线程
     ├── Util //和数据库连接的文件 实现的方法是把Dao层送过来的SQL语句送给数据库去执行，并把返回结果交回Dao
     │   ├── DButil.java //和数据库连接的文件
     │   ├── PropertyUtil.java //读取config.properties
