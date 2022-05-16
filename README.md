@@ -91,8 +91,7 @@
     │   ├── DButil.java //和数据库连接的文件
     │   ├── PropertyUtil.java //读取config.properties
     │   └── config.properties //这个没用，复制错了，删了就行
-    └── config.properties//实际上读取的文件是这个，里面是数据库信息。注意改第一行localhost:3306/ 后面的数据库名称
-    					   改第三行的数据库密码
+    └── config.properties//实际上读取的文件是这个，里面是数据库信息。注意改第一行localhost:3306/ 后面的数据库名称 改第三行的数据库密码
 
 20 directories, 45 files
 ```
