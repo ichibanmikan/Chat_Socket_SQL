@@ -83,7 +83,7 @@
     ├── Server //服务器
     │   ├── ServerFile.java //服务器发文件的
     │   ├── ServerFileThread.java //服务器文件线程
-    │   ├── ServerThread.java //服务器线程 是一种抽象的方法 好像每个客户端都有一个独立的服务器为他服务(实际上只是一个服务器								    线程为他服务)
+    │   ├── ServerThread.java //服务器线程 是一种抽象的方法 好像每个客户端都有一个独立的服务器为他服务(实际上只是一个服务器线程为他服务)
     │   |── SocketServer.java //循环等待客户端，给每一个客户端分配一个线程
     │   ├── ServerSingleChat.java //服务器管理私聊的
     │   ├── ServerSingleChatThread.java //私聊管理线程
